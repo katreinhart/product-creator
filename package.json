@@ -1,0 +1,27 @@
+{
+  "name": "product-creator",
+  "version": "1.0.0",
+  "description": "Generates random products with images from Unsplash and text using the HipsterIpsum API (hipsterjesus.com/api)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/katreinhart/product-creator.git"
+  },
+  "keywords": [
+    "json",
+    "product",
+    "creator",
+    "random",
+    "hipster",
+    "ipsum"
+  ],
+  "author": "Kat Reinhart <kat@reinhart.digital>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/katreinhart/product-creator/issues"
+  },
+  "homepage": "https://github.com/katreinhart/product-creator#readme"
+}
