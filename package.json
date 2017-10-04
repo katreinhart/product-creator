@@ -1,6 +1,6 @@
 {
   "name": "hipster-product-creator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generates random products with images from Unsplash and text using the HipsterIpsum API (hipsterjesus.com/api)",
   "main": "index.js",
   "scripts": {
