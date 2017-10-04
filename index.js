@@ -3,7 +3,7 @@ const uuid = require('uuid')
 const fs = require('fs')
 
 const writeStream = fs.createWriteStream('products.json')
-writeStream.write('{ \n "products": [\n')
+writeStream.write('{ \n "products": \t[\n')
 
 let styles = ["modern", "sartorial", "transitional", "traditional", "retro"]
 let types = ["jeans", "T-shirt", "chair", "table", "wall art", "coffee", "beer", "accessory"]
@@ -15,12 +15,9 @@ let sizes = ["small", "medium", "large", "xl", "xs"]
 createProductsArray()
 
 function createProductsArray() {
-  // const products = []
-  for(let i=0; i<10; i++) {
+  for(let i=0; i<100; i++) {
     createRandomProduct()
   }
-  // const JSONString = `{"products":${products}}`
-  // console.log(JSON.stringify(products))
 }
 
 function createRandomProduct() {
