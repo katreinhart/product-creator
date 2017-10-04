@@ -12,8 +12,14 @@ npm install hipster-product-creator
 ```
 Or fork and clone this repository.
 
+### Dependencies ###
+```
+fs
+```
+
 ### Generating products ###
 ```
+const fs = require('fs')
 const hipsterProductCreator = require('hipster-product-creator')
 hipsterProductCreator(n [, filename])
 ```
