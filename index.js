@@ -14,15 +14,17 @@ let sizes  = [ "xs", "small", "medium", "large", "xl"]
 // let productOptions = ["option1", "option2", "option3"] // et cetera
 // *******************************************
 
+// createProducts(10)
+
 function createProducts(n, outputFileName = FILENAME) {
   const writeStream = fs.createWriteStream(outputFileName)
   writeStream.on('open', function (fd) {
     writeStream.write('{ \n "products": \t[\n')
-    createRandomProducts(n)
+    createRandomProducts(n, writeStream)
   })
 }
 
-function createRandomProducts(n) {
+function createRandomProducts(n, writeStream) {
   request('http://hipsterjesus.com/api', (err, body, res) => {
     if(err) {
       console.log('error:', err)
@@ -35,12 +37,12 @@ function createRandomProducts(n) {
       const textArray = text.split(' ')
 
       for(let i=0; i < n; i++) {
-        writeProduct(textArray)
+        writeProduct(textArray, writeStream)
         writeStream.write(',\n')
         // all but last product need a comma & a newline in the JSON file
       }
 
-      writeProduct(textArray)
+      writeProduct(textArray, writeStream)
       writeStream.write('\n\t]\n}')
       // after last product, no comma but close array and object in JSON
     }
@@ -67,7 +69,7 @@ const badIds = ['636', '792', '205', '578', '462', '895', '226',
                 '734', '647', '712', '1034']
 
 
-function writeProduct(textArray) {
+function writeProduct(textArray, writeStream) {
   writeStream.write('\t\t')
   const product = {}
 
