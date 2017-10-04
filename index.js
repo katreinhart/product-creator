@@ -1,5 +1,9 @@
 const request = require('request')
+const uuid = require('uuid')
 const fs = require('fs')
+
+const writeStream = fs.createWriteStream('products.json')
+writeStream.write('{ \n "products": [\n')
 
 let styles = ["modern", "sartorial", "transitional", "traditional", "retro"]
 let types = ["jeans", "T-shirt", "chair", "table", "wall art", "coffee", "beer", "accessory"]
@@ -8,7 +12,6 @@ let sizes = ["small", "medium", "large", "xl", "xs"]
 // let ages = ["Under 2", "2-4", "4-6", "6-8", "8 and Up"]
 
 
-const products = []
 createProductsArray()
 
 function createProductsArray() {
@@ -17,7 +20,7 @@ function createProductsArray() {
     createRandomProduct()
   }
   // const JSONString = `{"products":${products}}`
-  console.log(JSON.stringify(products))
+  // console.log(JSON.stringify(products))
 }
 
 function createRandomProduct() {
@@ -48,13 +51,14 @@ function createRandomProduct() {
         product.tags.push(text[index])
       }
       product.style = styles[Math.floor(Math.random() * styles.length)]
-      product.type = types[Math.floor(Math.random() * types.length)]
-      product.size = sizes[Math.floor(Math.random() * sizes.length)]
+      product.type  = types[Math.floor(Math.random() * types.length)]
+      product.size  = sizes[Math.floor(Math.random() * sizes.length)]
       // product.age = ages[Math.floor(Math.random() * ages.length)]
       product.price = ((Math.random() * 20000)/100).toFixed(2)
       product.image = "https://unsplash.it/400/200?image=" + Math.floor(Math.random() * 1084)
-      console.log(JSON.stringify(product))
+      writeStream.write(JSON.stringify(product))
       // products.push(product)
+      writeStream.write(',\n')
     }
   })
 }
