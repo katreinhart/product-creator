@@ -1,5 +1,5 @@
 const request = require('request')
-const uuid = require('uuid')
+const uuidv4 = require('uuid/v4')
 const fs = require('fs')
 
 const writeStream = fs.createWriteStream('products.json')
@@ -12,17 +12,11 @@ let sizes = ["small", "medium", "large", "xl", "xs"]
 // let ages = ["Under 2", "2-4", "4-6", "6-8", "8 and Up"]
 
 
-createProductsArray()
+createRandomProducts(100)
 
-function createProductsArray() {
-  for(let i=0; i<100; i++) {
-    createRandomProduct()
-  }
-}
-
-function createRandomProduct() {
+function createRandomProducts(n) {
   request('http://hipsterjesus.com/api', (err, body, res) => {
-    const product = {}
+
     if(err) {
       console.log('error:', err)
       return
@@ -30,32 +24,19 @@ function createRandomProduct() {
     else {
       // console.log('body: ', body.body)
       let jsonRes = {}
-      jsonRes = JSON.stringify(JSON.parse(body.body))
-      // console.log(jsonRes.text)
-      const text = jsonRes.split(' ')
-
+      jsonRes = JSON.parse(body.body)
+      const text = jsonRes.text
+      // console.log(text)
       // start building a random product
-      let nameLength = Math.floor(Math.random() * 5)
-      let descriptionLength = Math.floor(Math.random() * 15) + 8
-      let numberTags = Math.floor(Math.random() * 3) + 4
+      const textArray = text.split(' ')
 
-      product.id = getNextID().toString()
-      product.name = randomString(text, nameLength)
-      product.description = randomString(text, descriptionLength)
-      product.tags = []
-      for(let i=0; i<numberTags; i++) {
-        let index = Math.floor(Math.random() * text.length)
-        product.tags.push(text[index])
+      for(let i=0; i < n; i++) {
+        writeProduct(textArray)
+        writeStream.write(',\n')
       }
-      product.style = styles[Math.floor(Math.random() * styles.length)]
-      product.type  = types[Math.floor(Math.random() * types.length)]
-      product.size  = sizes[Math.floor(Math.random() * sizes.length)]
-      // product.age = ages[Math.floor(Math.random() * ages.length)]
-      product.price = ((Math.random() * 20000)/100).toFixed(2)
-      product.image = "https://unsplash.it/400/200?image=" + Math.floor(Math.random() * 1084)
-      writeStream.write(JSON.stringify(product))
-      // products.push(product)
-      writeStream.write(',\n')
+
+      writeProduct(textArray)
+      writeStream.write('\n\t]\n}')
     }
   })
 }
@@ -73,6 +54,39 @@ function randomString(data, length) {
   return answer
 }
 
-function getNextID() {
-  return Date.now()
+const badIds = ['636', '792', '205', '578', '462', '895', '226',
+                '644', '763', '601', '285', '470', '226', '148',
+                '597', '303', '333', '332', '150', '748', '754',
+                '734', '647', '712', '1034']
+
+function writeProduct(textArray) {
+  writeStream.write('\t\t')
+
+  const product = {}
+
+  let nameLength = Math.floor(Math.random() * 5)
+  let descriptionLength = Math.floor(Math.random() * 15) + 8
+  let numberTags = Math.floor(Math.random() * 3) + 4
+
+  product.id = uuidv4()
+  product.name = randomString(textArray, nameLength)
+  product.description = randomString(textArray, descriptionLength)
+  product.tags = []
+  for(let i=0; i<numberTags; i++) {
+    let index = Math.floor(Math.random() * textArray.length)
+    product.tags.push(textArray[index])
+  }
+  product.style = styles[Math.floor(Math.random() * styles.length)]
+  product.type  = types[Math.floor(Math.random() * types.length)]
+  product.size  = sizes[Math.floor(Math.random() * sizes.length)]
+  // product.age = ages[Math.floor(Math.random() * ages.length)]
+  product.price = ((Math.random() * 20000)/100).toFixed(2)
+  let imageId
+  do {
+    imageId = Math.floor(Math.random() * 1084)
+  } while(badIds.includes(imageId.toString()))
+
+  product.image = `https://unsplash.it/400/200?image=${imageId}`
+
+  writeStream.write(JSON.stringify(product))
 }
