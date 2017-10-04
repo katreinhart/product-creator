@@ -16,8 +16,10 @@ let sizes  = [ "xs", "small", "medium", "large", "xl"]
 
 function createProducts(n, outputFileName = FILENAME) {
   const writeStream = fs.createWriteStream(outputFileName)
-  writeStream.write('{ \n "products": \t[\n')
-  createRandomProducts(n)
+  writeStream.on('open', function (fd) {
+    write('{ \n "products": \t[\n')
+    createRandomProducts(n)
+  })
 }
 
 function createRandomProducts(n) {
